@@ -1,0 +1,7 @@
+version: '3.9'
+name: "ftw"
+services:
+  test-intro-to-github:
+    environment:
+      - STAGE
+    image: "ghcr.io/mojoliciousftw/test-intro-to-github:${VERSION:-latest}"
