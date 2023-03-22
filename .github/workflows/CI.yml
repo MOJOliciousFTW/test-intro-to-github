@@ -32,7 +32,7 @@ jobs:
           pip install -r dev.requirements.txt
       - name: Lint with ruff
         run: |
-          ruff check .
+          ruff .
       - name: Static type checker with mypy
         run: |
           mypy . --exclude venv
