@@ -1,0 +1,62 @@
+name: CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Desired release version or branch to deploy"
+        required: true
+        default: "latest" # latest, 0.0.1, main, ..
+        type: string
+      stage:
+        description: "Select deployment stage"
+        required: true
+        default: "development"
+        type: choice
+        options:
+          - development
+          - production
+  workflow_call:
+    inputs:
+      version:
+        description: "Desired release version or branch to deploy"
+        required: true
+        default: "latest" # latest, 0.0.1, main, ..
+        type: string
+      stage:
+        description: "Select deployment stage"
+        required: true
+        default: "development"
+        type: string
+
+jobs:
+  deploy:
+    runs-on:
+      labels: [self-hosted, linux, some-machine]
+
+    name: "Deploy"
+
+    environment:
+      name: ${{ inputs.stage }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set environment variables
+        run: |
+          echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+          echo "STAGE=${{ inputs.stage }}" >> $GITHUB_ENV
+      - name: Docker compose
+        run: |
+          docker compose pull
+          docker compose down
+          docker compose up -d
+          docker image prune -af
