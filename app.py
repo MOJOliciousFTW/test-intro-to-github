@@ -1,7 +1,7 @@
-import time
+"""There must be a need for this app, I know it."""
 import logging
 import os
-
+import time
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
