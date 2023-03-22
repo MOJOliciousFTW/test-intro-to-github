@@ -17,4 +17,3 @@ if __name__ == "__main__":
             time.sleep(1)
     except KeyboardInterrupt:
         _LOGGER.debug("Stopped by keyboard interrupt.")
- 
