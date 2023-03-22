@@ -1,14 +1,11 @@
-"""
-Module docstring. Write something clever.
-"""
+"""Module docstring. Write something clever."""
 import logging
 
 _LOGGER = logging.getLogger(__name__)
 
 
 class Aclass:
-    """
-    Class docstring. Write something clever.
+    """Class docstring. Write something clever.
     Maybe something about inputs and outputs.
     """
 

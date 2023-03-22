@@ -1,13 +1,11 @@
-"""
-Module docstring. Write something clever.
-"""
+"""Module docstring. Write something clever."""
 from unittest import TestCase
+
 from src.examplepackage.example_module import Aclass
 
 
 class TestAclass(TestCase):
-    """
-    Class docstring. Write something clever.
+    """Class docstring. Write something clever.
     Maybe something about inputs and outputs.
     """
 
