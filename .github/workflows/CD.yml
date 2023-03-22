@@ -29,6 +29,9 @@ on:
         default: "development"
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on:
