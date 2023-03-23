@@ -36,7 +36,7 @@ jobs:
           black .
       - name: Lint with ruff
         run: |
-          ruff .
+          ruff . --fix
       - name: Static type checker with mypy
         run: |
           mypy . --exclude venv
