@@ -53,7 +53,7 @@ jobs:
           fi
 
       - name: Create Pull Request
-        if: $CHANGES
+        if: ${{ env.CHANGES }}
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
