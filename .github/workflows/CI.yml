@@ -8,14 +8,15 @@ on:
   workflow_call:
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12.0-alpha.6"]
+        python-version: ["3.10"]
 
     steps:
       - uses: actions/checkout@v3
@@ -30,15 +31,37 @@ jobs:
       - name: Install dev.requirements.txt
         run: |
           pip install -r dev.requirements.txt
+      - name: Fix formatting with black
+        run: |
+          black .
       - name: Lint with ruff
         run: |
-          ruff .
+          ruff . --fix
       - name: Static type checker with mypy
         run: |
           mypy . --exclude venv
-      - name: Check formatting with black
-        run: |
-          black --check .
+      
       - name: Test with pytest
         run: |
           pytest
+
+      - name: Check for changes
+        run: |
+          if [[ `git status --porcelain` ]]; then
+            echo "CHANGES=true" >> $GITHUB_ENV
+          else
+            echo "CHANGES=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create Pull Request
+        if: ${{ env.CHANGES }}
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Format Python code"
+          commit-message: ":art: Format Python code"
+          body: |
+            There appear to be some python formatting errors in ${{ github.sha }}. This pull request
+            tries to fix as many as possible of these issues.
+          base: ${{ github.head_ref }} # Creates pull request onto pull request or commit branch
+          branch: actions/formatter
